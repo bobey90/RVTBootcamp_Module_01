@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using System.Windows.Controls;
 
 namespace RVTBootcamp_Module_01
 {
@@ -68,8 +69,11 @@ namespace RVTBootcamp_Module_01
             FilteredElementCollector collector_plan;
             
             ViewPlan new_Mod_Plan;
+            ViewPlan new_Mod_Ceiling;
             ViewSheet newSheet;
             ViewFamilyType floorplanVFT;
+            ViewFamilyType ceilingPlanVFT;
+            ViewFamilyType curVFT;
 
             for (int i = 1; i <= level_number; ++i)
             {
@@ -93,32 +97,43 @@ namespace RVTBootcamp_Module_01
                     newSheet.SheetNumber = "A10" + i;
 
                 }
-
-                if (remainder_3 == 0)
+                else if (remainder_3 == 0)
                 {
-
-
-
                     collector_plan = new FilteredElementCollector(doc);
                     collector_plan.OfClass(typeof(ViewFamilyType));
 
                     floorplanVFT = null;
-                    foreach (ViewFamilyType curVFT in collector_plan)
-                    {
-                        if (curVFT.ViewFamily == ViewFamily.FloorPlan)
+
+                    foreach (curVFT in collector_plan)
                         {
-                            floorplanVFT = curVFT;
+                            if (curVFT.ViewFamily == ViewFamily.FloorPlan)
+                            {
+                                floorplanVFT = curVFT;
 
+
+                                new_Mod_Plan = ViewPlan.Create(doc, floorplanVFT.Id, NewLevel.Id);
+                                new_Mod_Plan.Name = "Fizz " + i;
+                            }
                         }
-                        new_Mod_Plan = ViewPlan.Create(doc, floorplanVFT.Id, NewLevel.Id);
-                        new_Mod_Plan.Name = "Fizz " + i;
-
-                    }
                 }
+                else if (remainder_5 == 0)
+                {
+                    collector_plan = new FilteredElementCollector(doc);
+                    collector_plan.OfClass(typeof(ViewFamilyType));
 
+                    ceilingPlanVFT = null;
 
-
-            }
+                    foreach (curVFT in collector_plan)
+                        {
+                                if (curVFT.ViewFamily == ViewFamily.CeilingPlan)
+                                {
+                                    ceilingPlanVFT = curVFT;
+                                    new_Mod_Ceiling = ViewPlan.Create(doc, ceilingPlanVFT.Id, NewLevel.Id);
+                                    new_Mod_Ceiling.Name = "Bizz " + i;
+                                }   //if statement create new ceiling
+                        }   //for each loop bracket                   
+                }   //else if remainder 5 bracket
+            }   //For loop Bracket
 
 
 
