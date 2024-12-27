@@ -19,6 +19,15 @@
     <VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
   </AddIn>
 	<AddIn Type="Command">
+		<Text>RVTBootcamp_Module_01 - Module01Review</Text>
+		<Description>Some description</Description>
+		<Assembly>RVTBootcamp_Module_01\RVTBootcamp_Module_01.dll</Assembly>
+		<FullClassName>RVTBootcamp_Module_01.Module01Review</FullClassName>
+		<ClientId>EF85D4E0-986A-471E-BC54-A1BB1D295739</ClientId>
+		<VendorId>com.YOUR COMPANY NAME</VendorId>
+		<VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
+	</AddIn>
+	<AddIn Type="Command">
 		<Text>RVTBootcamp_Module_01 - Module01Challenge</Text>
 		<Description>Some description</Description>
 		<Assembly>RVTBootcamp_Module_01\RVTBootcamp_Module_01.dll</Assembly>

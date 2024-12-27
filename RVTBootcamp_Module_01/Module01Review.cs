@@ -4,7 +4,7 @@ using System.Windows.Controls;
 namespace RVTBootcamp_Module_01
 {
     [Transaction(TransactionMode.Manual)]
-    public class Module01Challenge : IExternalCommand
+    public class Module01Review : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -53,92 +53,59 @@ namespace RVTBootcamp_Module_01
             Transaction t = new Transaction(doc);
             t.Start("Doing something in Revit");
 
-            int level_number = 250;
-
-            double starting_elevation = 0;
-            double floor_height = 15;
-            double remainder_3;
-            double remainder_5;
+            //1. set variables
+            int numFloors = 250;
+            double currentElev = 0;
+            int floorHeight = 15;
 
 
-            //string buzz = "Buzz ";
+            //9. get title block type
 
-            Level NewLevel;
+            FilteredElementCollector tbCollector = new FilteredElementCollector(doc);
+            tbCollector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+            tbCollector.WhereElementIsElementType();
+            ElementId tblockId = tbCollector.FirstElementId();
 
-            FilteredElementCollector collector_titleblock;
-            FilteredElementCollector collector_plan;
 
-            ViewPlan new_Mod_Plan;
-            ViewPlan new_Mod_Ceiling;
-            ViewSheet newSheet;
-            ViewFamilyType floorplanVFT;
-            ViewFamilyType ceilingPlanVFT;
-            XYZ insPoint;
+            //2. loop through floors and check FIZZBUZZ
 
-            for (int i = 1; i <= level_number; ++i)
+            for (int i = 1; i <= numFloors; i++)
             {
 
-                NewLevel = Level.Create(doc, starting_elevation);
-                NewLevel.Name = "Level " + i;
-                starting_elevation += floor_height;
-
-                remainder_3 = i % 3;
-                remainder_5 = i % 5;
+                //3. create level
+                Level newLevel = Level.Create(doc, currentElev);
+                newLevel.Name = "LEVEL" + i.ToString();
 
 
+                //4. increment elevation
+                currentElev += floorHeight;
 
-                if (remainder_3 == 0 && remainder_5 == 0)
+                //5. check for FIZZBUZZ
+
+                if (i % 3 == 0 && i % 5 == 0)
                 {
-                    collector_titleblock = new FilteredElementCollector(doc);
-                    collector_titleblock.OfCategory(BuiltInCategory.OST_TitleBlocks);
+                    //6. FIZZBUZ - create sheet
+                    ViewSheet newSheet = ViewSheet.Create(doc, tblockId);
+                    newSheet.SheetNumber = i.ToString();
+                    newSheet.Name = "FIZZBUZZ" + i.ToString();
 
-                    newSheet = ViewSheet.Create(doc, collector_titleblock.FirstElementId());
-                    newSheet.Name = "FizzBuzz" + i;
-                    newSheet.SheetNumber = "A10" + i;
-
+                    
                 }
-                else if (remainder_3 == 0)
+                else if (i%3 == 0)
                 {
-                    collector_plan = new FilteredElementCollector(doc);
-                    collector_plan.OfClass(typeof(ViewFamilyType));
-
-                    floorplanVFT = null;
-
-                    foreach (ViewFamilyType curVFT in collector_plan)
-                    {
-                        if (curVFT.ViewFamily == ViewFamily.FloorPlan)
-                        {
-                            floorplanVFT = curVFT;
-
-                            new_Mod_Plan = ViewPlan.Create(doc, floorplanVFT.Id, NewLevel.Id);
-                            new_Mod_Plan.Name = "Fizz " + i;
-
-
-                        }
-
-                    }
-
+                    //7. Fizz - create floor plan
                 }
-                else if (remainder_5 == 0)
+                else if (i % 5 == 0)
                 {
-                    collector_plan = new FilteredElementCollector(doc);
-                    collector_plan.OfClass(typeof(ViewFamilyType));
-
-                    ceilingPlanVFT = null;
-
-                    foreach (ViewFamilyType curVFT in collector_plan)
-                    {
-                        if (curVFT.ViewFamily == ViewFamily.CeilingPlan)
-                        {
-                            ceilingPlanVFT = curVFT;
-                            new_Mod_Ceiling = ViewPlan.Create(doc, ceilingPlanVFT.Id, NewLevel.Id);
-                            new_Mod_Ceiling.Name = "Bizz " + i;
-                        }   //if statement create new ceiling
-                    }   //for each loop bracket                   
-                }   //else if remainder 5 bracket
-            }   //For loop Bracket
+                    //8. BUZZ - Create ceiling plan
+                }
 
 
+
+
+            }
+
+            // 6. Aler user
 
 
 
